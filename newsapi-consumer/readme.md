@@ -1,11 +1,11 @@
-##Laravel 5.4 based newsapi.org API consumer
+## Laravel 5.4 based newsapi.org API consumer
 Please run ```composer install``` after downloading the project.
 
-###Configuration
+### Configuration
 All you need to do is to [obtain newsapi API key](https://newsapi.org/account) and provide it in `.env` file like so:
 `NEWSAPI_KEY=1e7496493bla-bla-bla`
 
-####API features
+#### API features
 This custom API mimics two main newsapi.org API resources:
 - https://newsapi.org/v1/sources
 - https://newsapi.org/v1/articles
@@ -88,7 +88,7 @@ Sample output:
 }
 ```
 
-####Automation testing
+#### Automation testing
 Feel free to run feature tests to check is everything still works as expected:
   ```shell
   ./vendor/bin/phpunit

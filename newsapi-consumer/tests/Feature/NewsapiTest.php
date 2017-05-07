@@ -3,9 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class NewsapiTest extends TestCase
 {
@@ -16,7 +13,7 @@ class NewsapiTest extends TestCase
      */
     public function testSources()
     {
-        $response = $this->get('/api/sources');
+        $response = $this->get('/api/newsapi/sources');
 
         $response->assertStatus(200);
     }
@@ -26,13 +23,14 @@ class NewsapiTest extends TestCase
      *
      * @return void
      */
-    public function testArticles()
+    public function testAbcNewsAuArticles()
     {
-        $response = $this->get('/api/articles/abc-news-au');
+        $response = $this->get('/api/newsapi/articles/abc-news-au');
 
         $response->assertStatus(200);
-
         $response->assertJsonFragment(['status' => 'success']);
+        $response->assertJsonFragment(['NG_Description' => 'Custom description']);
+        $response->assertJsonFragment(['NG_Review' => 'Custom review']);
     }
 
     /**
@@ -42,10 +40,9 @@ class NewsapiTest extends TestCase
      */
     public function testArticlesWrongSourceId()
     {
-        $response = $this->get('/api/articles/abc-news-aus');
+        $response = $this->get('/api/newsapi/articles/abc-news-aus');
 
         $response->assertStatus(400);
-
         $response->assertJsonFragment(['status' => 'error']);
     }
 }

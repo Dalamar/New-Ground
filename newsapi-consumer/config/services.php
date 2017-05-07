@@ -39,4 +39,8 @@ return [
         'key' => env('NEWSAPI_KEY'),
     ],
 
+    'skyscanner' => [
+        'key' => env('SKYSCANNER_KEY'),
+    ],
+
 ];

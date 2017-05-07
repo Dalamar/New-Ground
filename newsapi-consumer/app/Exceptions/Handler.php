@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -44,6 +45,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof RequestException && $request->acceptsJson()) {
+            if ($exception->hasResponse()) {
+                return \Response::api($exception->getResponse()->getBody()->getContents(), [$exception->getMessage()]);
+            }
+        }
+
         return parent::render($request, $exception);
     }
 

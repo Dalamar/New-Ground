@@ -1,18 +1,33 @@
-## Laravel 5.4 based newsapi.org API consumer
+## Laravel 5.4 based API consumer and on-the-fly custom data injector
 Please run ```composer install``` after downloading the project.
 
 ### Configuration
-All you need to do is to [obtain newsapi API key](https://newsapi.org/account) and provide it in `.env` file like so:
+All you need to do is to obtain [newsapi API key](https://newsapi.org/account) and [Skyscanner API key](http://portal.business.skyscanner.net/ru-ru/accounts/dashboard/?r=true) and provide them in `.env` file like so:
 `NEWSAPI_KEY=1e7496493bla-bla-bla`
+`SKYSCANNER_KEY==2f7496493bla-bla-bla`
+
+### Performance optimization
+I recommend to cache Laravel configuration and routes for better performance.
+```shell
+  php artisan config:cache && php artisan route:cache && php artisan optimize
+  ```
+
+### Response caching
+Api controllers are caching processed result for 1 minute.
 
 #### API features
 This custom API mimics two main newsapi.org API resources:
 - https://newsapi.org/v1/sources
 - https://newsapi.org/v1/articles
 
+And one of Skyscanner resource:
+- http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0
+
 Assuming you will run this application using `php artisan serve`
 
-- To get available sources use following URI: [http://127.0.0.1:8000/api/sources](http://127.0.0.1:8000/api/sources)
+
+#### Example for News API
+- To get available sources use following URI: [http://127.0.0.1:8000/api/newsapi/sources](http://127.0.0.1:8000/api/newsapi/sources)
 Sample output:
 ```json
 {
@@ -53,7 +68,7 @@ Sample output:
 	"time": "2017-05-02 19:04:28"
 }
  ```
-- To get customized articles for source `abc-news-au` use following URI: [http://127.0.0.1:8000/api/articles/abc-news-au](http://127.0.0.1:8000/api/articles/abc-news-au)
+- To get customized articles for source `abc-news-au` use following URI: [http://127.0.0.1:8000/api/newsapi/articles/abc-news-au](http://127.0.0.1:8000/api/newsapi/articles/abc-news-au)
 Sample output:
 
 ```json
@@ -86,6 +101,59 @@ Sample output:
 	},
 	"time": "2017-05-02 19:06:20"
 }
+```
+
+#### Example for Skyscanner
+- To get browse quotes use following URI: [http://127.0.0.1:8000/api/skyscanner/browsequotes/ES/eur/en-US/uk/us/2017-06-19/2017-06-20](http://127.0.0.1:8000/api/skyscanner/browsequotes/ES/eur/en-US/uk/us/2017-06-19/2017-06-20)
+Sample output:
+
+```json
+    {
+    	"status": "success",
+    	"message": [],
+    	"payload": {
+    		"Quotes": [{
+    			"QuoteId": 1,
+    			"MinPrice": 413,
+    			"Direct": false,
+    			"OutboundLeg": {
+    				"CarrierIds": [1929],
+    				"OriginId": 65655,
+    				"DestinationId": 68033,
+    				"DepartureDate": "2017-06-19T00:00:00"
+    			},
+    			"InboundLeg": {
+    				"CarrierIds": [1929],
+    				"OriginId": 68033,
+    				"DestinationId": 65655,
+    				"DepartureDate": "2017-06-20T00:00:00"
+    			},
+    			"QuoteDateTime": "2017-05-07T02:58:00",
+    			"NG_Description": "Custom description",
+    			"NG_Review": "Custom review"
+    		}, {
+    			"QuoteId": 2,
+    			"MinPrice": 2255,
+    			"Direct": true,
+    			"OutboundLeg": {
+    				"CarrierIds": [857],
+    				"OriginId": 65698,
+    				"DestinationId": 68033,
+    				"DepartureDate": "2017-06-19T00:00:00"
+    			},
+    			"InboundLeg": {
+    				"CarrierIds": [857],
+    				"OriginId": 68033,
+    				"DestinationId": 65698,
+    				"DepartureDate": "2017-06-20T00:00:00"
+    			},
+    			"QuoteDateTime": "2017-04-26T19:06:00",
+    			"NG_Description": "Custom description",
+    			"NG_Review": "Custom review"
+    		}]
+        },
+        "time": "2017-05-07 20:48:43"
+     }
 ```
 
 #### Automation testing

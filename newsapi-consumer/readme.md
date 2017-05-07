@@ -3,8 +3,10 @@ Please run ```composer install``` after downloading the project.
 
 ### Configuration
 All you need to do is to obtain [newsapi API key](https://newsapi.org/account) and [Skyscanner API key](http://portal.business.skyscanner.net/ru-ru/accounts/dashboard/?r=true) and provide them in `.env` file like so:
-`NEWSAPI_KEY=1e7496493bla-bla-bla
-SKYSCANNER_KEY==2f7496493bla-bla-bla`
+```
+NEWSAPI_KEY=1e7496493bla-bla-bla
+SKYSCANNER_KEY==2f7496493bla-bla-bla
+```
 
 ### Performance optimization
 I recommend to cache Laravel configuration and routes for better performance.
